@@ -1,0 +1,1183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daystar Academy | School Management System</title>
+
+<style>
+:root {
+  --blue: #173b72;
+  --blue2: #0b2852;
+  --gold: #e5ad38;
+  --bg: #f3f6fb;
+  --ink: #202b3c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: var(--ink);
+  background:
+    linear-gradient(rgba(8,24,49,.55), rgba(8,24,49,.65)),
+    url("daystar-gate.jpg") center center / cover fixed no-repeat;
+}
+
+header {
+  background: rgba(11,40,82,.95);
+  color: white;
+  text-align: center;
+  padding: 22px 15px;
+  border-bottom: 3px solid var(--gold);
+}
+
+header h1 {
+  margin: 0 0 8px;
+  letter-spacing: 2px;
+  font-size: 27px;
+}
+
+header p { margin: 0; }
+
+.wrap {
+  max-width: 1150px;
+  margin: auto;
+  padding: 20px;
+}
+
+.panel {
+  background: rgba(255,255,255,.97);
+  padding: 22px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+h2 { color: var(--blue); margin-top: 0; }
+
+button, input, select {
+  font: inherit;
+  padding: 11px;
+  border-radius: 7px;
+}
+
+input, select {
+  width: 100%;
+  border: 1px solid #cbd4e0;
+  background: white;
+}
+
+button {
+  border: 0;
+  background: var(--blue);
+  color: white;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover { background: var(--blue2); }
+
+label {
+  display: block;
+  margin: 13px 0 6px;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+  gap: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.secondary { background: #64748b; }
+.danger { background: #b42332; }
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 17px;
+}
+
+.nav button {
+  background: #e0e9f6;
+  color: var(--blue);
+}
+
+.nav button.active {
+  background: var(--blue);
+  color: white;
+}
+
+.hidden { display: none !important; }
+
+.muted {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th, td {
+  text-align: left;
+  padding: 11px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+th { background: #eaf0f8; }
+
+.stat {
+  background: #edf3fb;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.stat strong { color: var(--blue); }
+
+#notice {
+  background: #fff2ce;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  background: rgba(11,40,82,.9);
+}
+
+#authView {
+  min-height: 72vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  background: rgba(255,255,255,.96);
+  border-radius: 18px;
+  box-shadow: 0 15px 45px rgba(0,0,0,.3);
+}
+
+.school-icon {
+  width: 65px;
+  height: 65px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: var(--gold);
+  font-size: 32px;
+  margin: 0 auto 12px;
+}
+
+.auth-card h2 {
+  text-align: center;
+  margin-bottom: 7px;
+  letter-spacing: 1px;
+}
+
+.auth-card .subtitle {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.auth-card label { text-align: left; }
+
+.auth-card .actions { justify-content: center; }
+
+.auth-card button { min-width: 130px; }
+
+#authMessage { min-height: 18px; }
+
+@media (max-width: 600px) {
+  body { background-attachment: scroll; }
+  header h1 { font-size: 22px; }
+  .wrap { padding: 12px; }
+  .auth-card { padding: 23px 17px; }
+  th, td { padding: 8px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>DAYSTAR ACADEMY LUKOLIS</h1>
+  <p>Learn • Grow • Achieve</p>
+  <p>School Management System | Grade 1–Grade 9</p>
+</header>
+
+<!-- SIGN IN AND REGISTRATION -->
+<div id="authView" class="wrap">
+  <section class="auth-card">
+    <div class="school-icon">.✦.</div>
+    <h2 id="authTitle">DAYSTAR ACADEMY</h2>
+    <p class="subtitle" id="authSubtitle">School Management System</p>
+
+    <form id="authForm">
+      <div id="nameField" class="hidden">
+        <label for="fullName">Full name</label>
+        <input id="fullName" autocomplete="name">
+      </div>
+
+      <label for="username">Username</label>
+      <input id="username" required autocomplete="username">
+
+      <div id="emailField" class="hidden">
+        <label for="email">Email address</label>
+        <input id="email" type="email" autocomplete="email">
+      </div>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" required
+             minlength="8" autocomplete="current-password">
+
+      <div id="confirmField" class="hidden">
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" type="password" minlength="8">
+      </div>
+
+      <div class="actions">
+        <button id="authSubmit" type="submit">Sign In</button>
+        <button id="toggleAuth" type="button" class="secondary">
+          Create Account
+        </button>
+      </div>
+
+      <p id="authMessage" class="muted" role="status"></p>
+    </form>
+
+    <p class="muted">Daystar Academy | Building Tomorrow's Leaders</p>
+  </section>
+</div>
+
+<!-- SCHOOL APPLICATION -->
+<main id="appView" class="wrap hidden">
+
+  <section class="panel">
+    <div class="grid">
+      <div class="stat">
+        <strong>Signed in as</strong>
+        <p id="signedUser"></p>
+      </div>
+      <div class="stat">
+        <strong>Total Students</strong>
+        <p id="studentCount">0</p>
+      </div>
+      <div class="stat">
+        <strong>Attendance Records</strong>
+        <p id="attendanceCount">0</p>
+      </div>
+      <div class="stat">
+        <strong>Exam Results</strong>
+        <p id="resultCount">0</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="logout" class="danger">Sign Out</button>
+    </div>
+  </section>
+
+  <nav class="nav" aria-label="School management">
+    <button class="active" data-page="dashboard">Dashboard</button>
+    <button data-page="students">Students</button>
+    <button data-page="attendance">Attendance</button>
+    <button data-page="results">Exam Results</button>
+    <button data-page="reports">Reports</button>
+    <button data-page="accounts">Accounts</button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <section id="page-dashboard" class="page panel">
+    <h2>School Dashboard</h2>
+    <p>Welcome to Daystar Academy School Management System.</p>
+
+    <div class="grid">
+      <div class="stat">
+        <h3>Student Records</h3>
+        <p>Register students and assign their grades.</p>
+        <button data-go="students">Manage Students</button>
+      </div>
+      <div class="stat">
+        <h3>Attendance</h3>
+        <p>Record school arrival and confirmed home arrival.</p>
+        <button data-go="attendance">Record Attendance</button>
+      </div>
+      <div class="stat">
+        <h3>Academic Results</h3>
+        <p>Record marks by subject, term and grade.</p>
+        <button data-go="results">Enter Results</button>
+      </div>
+    </div>
+
+    <h3>Available Classes</h3>
+    <p id="gradeList"></p>
+  </section>
+
+  <!-- STUDENTS -->
+  <section id="page-students" class="page panel hidden">
+    <h2>Student Registration</h2>
+
+    <form id="studentForm">
+      <div class="grid">
+        <div>
+          <label for="studentName">Student full name</label>
+          <input id="studentName" required>
+        </div>
+        <div>
+          <label for="admission">Admission number</label>
+          <input id="admission" required>
+        </div>
+        <div>
+          <label for="studentGrade">Grade</label>
+          <select id="studentGrade" required></select>
+        </div>
+        <div>
+          <label for="stream">Stream</label>
+          <input id="stream" placeholder="Optional">
+        </div>
+        <div>
+          <label for="guardian">Parent/guardian name</label>
+          <input id="guardian" placeholder="Optional">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Register Student</button>
+      </div>
+      <p id="studentMessage" class="muted" role="status"></p>
+    </form>
+
+    <label for="studentFilter">Filter by grade</label>
+    <select id="studentFilter"></select>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Admission No.</th>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Stream</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="studentRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ATTENDANCE -->
+  <section id="page-attendance" class="page panel hidden">
+    <h2>Attendance and Arrival Tracking</h2>
+    <p class="muted">
+      Record school arrival, absence, or home arrival confirmed by a guardian
+      or authorised person. This prototype does not track GPS location.
+    </p>
+
+    <form id="attendanceForm">
+      <div class="grid">
+        <div>
+          <label for="attendanceStudent">Student</label>
+          <select id="attendanceStudent" required></select>
+        </div>
+        <div>
+          <label for="attendanceDate">Date</label>
+          <input id="attendanceDate" type="date" required>
+        </div>
+        <div>
+          <label for="attendanceType">Attendance event</label>
+          <select id="attendanceType">
+            <option>School arrival</option>
+            <option>Home arrival confirmed</option>
+            <option>Absent</option>
+          </select>
+        </div>
+        <div>
+          <label for="recordedBy">Recorded/confirmed by</label>
+          <input id="recordedBy" required>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Save Attendance</button>
+      </div>
+      <p id="attendanceMessage" class="muted" role="status"></p>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Student</th><th>Event</th><th>Confirmed by</th></tr>
+        </thead>
+        <tbody id="attendanceRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- EXAM RESULTS -->
+  <section id="page-results" class="page panel hidden">
+    <h2>Examination Results</h2>
+
+    <form id="resultForm">
+      <div class="grid">
+        <div>
+          <label for="resultStudent">Student</label>
+          <select id="resultStudent" required></select>
+        </div>
+        <div>
+          <label for="resultSubject">Subject</label>
+          <input id="resultSubject" required placeholder="Mathematics">
+        </div>
+        <div>
+          <label for="resultTerm">Term</label>
+          <select id="resultTerm">
+            <option>Term 1</option>
+            <option>Term 2</option>
+            <option>Term 3</option>
+          </select>
+        </div>
+        <div>
+          <label for="resultYear">Year</label>
+          <input id="resultYear" type="number" min="2000"
+                 max="2100" value="2026" required>
+        </div>
+        <div>
+          <label for="resultMarks">Marks (0–100)</label>
+          <input id="resultMarks" type="number" min="0"
+                 max="100" required>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Save Result</button>
+      </div>
+      <p id="resultMessage" class="muted" role="status"></p>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th><th>Grade</th><th>Subject</th>
+            <th>Term/Year</th><th>Marks</th><th>Grade</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="resultRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- REPORTS -->
+  <section id="page-reports" class="page panel hidden">
+    <h2>Reports and Exports</h2>
+    <p>Download records as CSV files that can be opened in Excel.</p>
+    <div class="actions">
+      <button data-export="students">Export Students</button>
+      <button data-export="attendance">Export Attendance</button>
+      <button data-export="results">Export Results</button>
+    </div>
+  </section>
+
+  <!-- ACCOUNTS: ADMIN ONLY -->
+<section id="page-accounts" class="page panel hidden">
+  <h2>Registered Accounts</h2>
+  <p class="muted">Administrator-only account directory.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody id="accountRows"></tbody>
+    </table>
+  </div>
+  </section>
+
+</main>
+
+<footer>
+  DAYSTAR ACADEMY | Learn • Grow • Achieve
+</footer>
+
+<script>
+"use strict";
+
+const GRADES = Array.from({length: 9}, (_, i) => "Grade " + (i + 1));
+
+const KEYS = {
+  users: "daystar_users_v1",
+  students: "daystar_students_v1",
+  attendance: "daystar_attendance_v1",
+  results: "daystar_results_v1",
+  session: "daystar_session_v1"
+};
+
+const $ = id => document.getElementById(id);
+
+function read(key) {
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function write(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function uid() {
+  return crypto.randomUUID
+    ? crypto.randomUUID()
+    : Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[c]);
+}
+
+function currentUser() {
+  const id = localStorage.getItem(KEYS.session);
+  return read(KEYS.users).find(u => u.id === id) || null;
+}
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
+}
+
+let registering = false;
+let activePage = "dashboard";
+
+function setAuthMode(create) {
+  registering = create;
+
+  $("authTitle").textContent = create
+    ? "CREATE ACCOUNT" : "DAYSTAR ACADEMY";
+
+  $("authSubtitle").textContent = create
+    ? "Register a new account" : "School Management System";
+
+  $("authSubmit").textContent = create
+    ? "Register Account" : "Sign In";
+
+  $("toggleAuth").textContent = create
+    ? "Back to Sign In" : "Create Account";
+
+  $("nameField").classList.toggle("hidden", !create);
+  $("emailField").classList.toggle("hidden", !create);
+  $("confirmField").classList.toggle("hidden", !create);
+
+  $("fullName").required = create;
+  $("email").required = create;
+  $("confirmPassword").required = create;
+  $("password").autocomplete = create ? "new-password" : "current-password";
+  $("authMessage").textContent = "";
+}
+
+$("toggleAuth").addEventListener("click", () => {
+  setAuthMode(!registering);
+});
+
+async function passwordHash(password, existingSalt) {
+  const encoder = new TextEncoder();
+
+  const salt = existingSalt
+    ? Uint8Array.from(existingSalt.match(/.{2}/g), x => parseInt(x, 16))
+    : crypto.getRandomValues(new Uint8Array(16));
+
+  const key = await crypto.subtle.importKey(
+    "raw", encoder.encode(password), "PBKDF2", false, ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits({
+    name: "PBKDF2",
+    salt,
+    iterations: 150000,
+    hash: "SHA-256"
+  }, key, 256);
+
+  return {
+    salt: Array.from(salt, b => b.toString(16).padStart(2, "0")).join(""),
+    hash: Array.from(new Uint8Array(bits),
+      b => b.toString(16).padStart(2, "0")).join("")
+  };
+}
+
+function constantTimeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
+$("authForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  $("authSubmit").disabled = true;
+  $("authMessage").textContent = "Please wait…";
+
+  try {
+    if (!crypto.subtle || !crypto.getRandomValues) {
+      throw Error("Open this app using localhost in a modern browser.");
+    }
+
+    const username = $("username").value.trim();
+    const password = $("password").value;
+    const users = read(KEYS.users);
+
+    if (registering) {
+      const name = $("fullName").value.trim();
+      const email = $("email").value.trim().toLowerCase();
+
+      if (!name || !email || !username) {
+        throw Error("Complete all required fields.");
+      }
+
+      if (password.length < 8) {
+        throw Error("Password must contain at least 8 characters.");
+      }
+
+      if (password !== $("confirmPassword").value) {
+        throw Error("Passwords do not match.");
+      }
+
+      if (users.some(u =>
+        u.username.toLowerCase() === username.toLowerCase())) {
+        throw Error("Username already exists.");
+      }
+
+      if (users.some(u => u.email.toLowerCase() === email)) {
+        throw Error("Email is already registered.");
+      }
+
+      const hashed = await passwordHash(password);
+      const user = {
+        id: uid(), name, email, username,
+        salt: hashed.salt, hash: hashed.hash
+      };
+
+      users.push(user);
+      write(KEYS.users, users);
+      localStorage.setItem(KEYS.session, user.id);
+
+      $("authForm").reset();
+      enterApp();
+    } else {
+      const user = users.find(u =>
+        u.username.toLowerCase() === username.toLowerCase());
+
+      if (!user) throw Error("Incorrect username or password.");
+
+      const attempt = await passwordHash(password, user.salt);
+
+      if (!constantTimeEqual(attempt.hash, user.hash)) {
+        throw Error("Incorrect username or password.");
+      }
+
+      localStorage.setItem(KEYS.session, user.id);
+      $("authForm").reset();
+      enterApp();
+    }
+  } catch (error) {
+    $("authMessage").textContent =
+      error.message || "Unable to sign in or register.";
+  } finally {
+    $("authSubmit").disabled = false;
+  }
+});
+
+function enterApp() {
+  const user = currentUser();
+  if (!user) return showAuth();
+
+  // Keep the login/register screen hidden once a valid session exists.
+  $("authView").classList.add("hidden");
+  $("appView").classList.remove("hidden");
+  $("signedUser").textContent = user.name + " (" + user.username + ")";
+  document.querySelector('[data-page="accounts"]').classList.toggle("hidden", !canViewAccounts());
+
+  renderAll();
+  showPage(activePage);
+}
+
+function showAuth() {
+  // Only show login when there is no valid signed-in session.
+  $("appView").classList.add("hidden");
+  $("authView").classList.remove("hidden");
+  setAuthMode(false);
+}
+
+$("logout").addEventListener("click", () => {
+  localStorage.removeItem(KEYS.session);
+  showAuth();
+});
+
+function setupGrades() {
+  $("studentGrade").innerHTML = GRADES.map(g =>
+    `<option>${g}</option>`).join("");
+
+  $("studentFilter").innerHTML =
+    '<option value="">All grades</option>' +
+    GRADES.map(g => `<option>${g}</option>`).join("");
+
+  $("gradeList").textContent = GRADES.join(" • ");
+  $("attendanceDate").value = today();
+}
+
+function showPage(page) {
+  if (page === "accounts" && !canViewAccounts()) {
+    alert("Access denied. Admin only.");
+    page = "dashboard";
+  }
+  activePage = page;
+
+  document.querySelectorAll(".page").forEach(p =>
+    p.classList.add("hidden"));
+
+  $("page-" + page).classList.remove("hidden");
+
+  document.querySelectorAll("[data-page]").forEach(button =>
+    button.classList.toggle("active", button.dataset.page === page));
+
+  renderAll();
+}
+
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.go));
+});
+
+function students() {
+  return read(KEYS.students);
+}
+
+function studentName(id) {
+  const student = students().find(s => s.id === id);
+  return student ? student.name : "Unknown student";
+}
+
+function fillStudentSelect(select, placeholder) {
+  const oldValue = select.value;
+
+  select.innerHTML = `<option value="">${safe(placeholder)}</option>` +
+    students().slice().sort((a,b) => a.name.localeCompare(b.name))
+      .map(s => `<option value="${safe(s.id)}">${safe(s.name)} — ${
+        safe(s.admission)} (${safe(s.grade)})</option>`).join("");
+
+  if (students().some(s => s.id === oldValue)) {
+    select.value = oldValue;
+  }
+}
+
+$("studentForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const list = students();
+  const admission = $("admission").value.trim();
+
+  if (list.some(s =>
+    s.admission.toLowerCase() === admission.toLowerCase())) {
+    $("studentMessage").textContent = "Admission number already exists.";
+    return;
+  }
+
+  list.push({
+    id: uid(),
+    name: $("studentName").value.trim(),
+    admission,
+    grade: $("studentGrade").value,
+    stream: $("stream").value.trim(),
+    guardian: $("guardian").value.trim(),
+    createdBy: currentUser().id
+  });
+
+  write(KEYS.students, list);
+  event.target.reset();
+  $("studentMessage").textContent = "Student registered successfully.";
+  renderAll();
+});
+
+$("studentFilter").addEventListener("change", renderStudents);
+
+function renderStudents() {
+  const filter = $("studentFilter").value;
+
+  $("studentRows").innerHTML = students()
+    .filter(s => !filter || s.grade === filter)
+    .map(s => `<tr>
+      <td>${safe(s.admission)}</td>
+      <td>${safe(s.name)}</td>
+      <td>${safe(s.grade)}</td>
+      <td>${safe(s.stream || "—")}</td>
+      <td><button class="danger" data-delete-student="${safe(s.id)}">Delete</button></td>
+    </tr>`).join("");
+}
+
+$("studentRows").addEventListener("click", event => {
+  const button = event.target.closest("[data-delete-student]");
+  if (!button) return;
+
+  if (!confirm("Delete this student and their related records?")) return;
+
+  const id = button.dataset.deleteStudent;
+
+  write(KEYS.students, students().filter(s => s.id !== id));
+  write(KEYS.attendance,
+    read(KEYS.attendance).filter(a => a.studentId !== id));
+  write(KEYS.results,
+    read(KEYS.results).filter(r => r.studentId !== id));
+
+  renderAll();
+});
+
+$("attendanceForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const studentId = $("attendanceStudent").value;
+
+  if (!students().some(s => s.id === studentId)) {
+    $("attendanceMessage").textContent = "Register a student first.";
+    return;
+  }
+
+  const list = read(KEYS.attendance);
+
+  list.push({
+    id: uid(),
+    studentId,
+    date: $("attendanceDate").value,
+    type: $("attendanceType").value,
+    recordedBy: $("recordedBy").value.trim(),
+    recordedAt: new Date().toISOString(),
+    createdBy: currentUser().id
+  });
+
+  write(KEYS.attendance, list);
+  $("attendanceMessage").textContent = "Attendance record saved.";
+  renderAll();
+});
+
+$("resultForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const studentId = $("resultStudent").value;
+  const marks = Number($("resultMarks").value);
+
+  if (!students().some(s => s.id === studentId)) {
+    $("resultMessage").textContent = "Register a student first.";
+    return;
+  }
+
+  if (!Number.isFinite(marks) || marks < 0 || marks > 100) {
+    $("resultMessage").textContent = "Marks must be between 0 and 100.";
+    return;
+  }
+
+  const list = read(KEYS.results);
+
+  list.push({
+    id: uid(),
+    studentId,
+    subject: $("resultSubject").value.trim(),
+    term: $("resultTerm").value,
+    year: Number($("resultYear").value),
+    marks,
+    createdBy: currentUser().id
+  });
+
+  write(KEYS.results, list);
+  $("resultMessage").textContent =
+    "Result saved. Grade: " + markGrade(marks);
+  renderAll();
+});
+
+function markGrade(marks) {
+  if (marks >= 80) return "A";
+  if (marks >= 70) return "B";
+  if (marks >= 60) return "C";
+  if (marks >= 50) return "D";
+  return "E";
+}
+
+function renderAttendance() {
+  $("attendanceRows").innerHTML =
+    read(KEYS.attendance).slice().reverse().map(a => `
+      <tr>
+        <td>${safe(a.date)}</td>
+        <td>${safe(studentName(a.studentId))}</td>
+        <td>${safe(a.type)}</td>
+        <td>${safe(a.recordedBy)}</td>
+      </tr>`).join("");
+}
+
+function renderResults() {
+  $("resultRows").innerHTML =
+    read(KEYS.results).slice().reverse().map(r => {
+      const student = students().find(s => s.id === r.studentId);
+
+      return `<tr>
+        <td>${safe(student ? student.name : "Unknown")}</td>
+        <td>${safe(student ? student.grade : "—")}</td>
+        <td>${safe(r.subject)}</td>
+        <td>${safe(r.term)} / ${safe(r.year)}</td>
+        <td>${safe(r.marks)}</td>
+        <td>${markGrade(Number(r.marks))}</td>
+        <td><button class="danger" data-delete-result="${safe(r.id)}">Delete</button></td>
+      </tr>`;
+    }).join("");
+}
+
+$("resultRows").addEventListener("click", event => {
+  const button = event.target.closest("[data-delete-result]");
+  if (!button) return;
+
+  if (!confirm("Delete this result?")) return;
+
+  write(KEYS.results, read(KEYS.results)
+    .filter(r => r.id !== button.dataset.deleteResult));
+
+  renderAll();
+});
+
+function canViewAccounts() {
+  const user = currentUser();
+  return !!user && (user.role === "admin" || user.username.toLowerCase() === "admin");
+}
+
+function showAccountsPage() {
+  if (!canViewAccounts()) {
+    alert("Access denied. Admin only.");
+    showPage("dashboard");
+    return;
+  }
+  document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+  $("page-accounts").classList.remove("hidden");
+  document.querySelectorAll("[data-page]").forEach(button =>
+    button.classList.toggle("active", button.dataset.page === "accounts"));
+  activePage = "accounts";
+  renderAccounts();
+}
+
+function renderAccounts() {
+  if (!canViewAccounts()) {
+    $("accountRows").innerHTML = "";
+    return;
+  }
+  const current = currentUser();
+  const users = read(KEYS.users);
+  $("accountRows").innerHTML = users.map(u => `
+    <tr>
+      <td>${safe(u.name || "")}</td>
+      <td>${safe(u.username || "")}</td>
+      <td>${safe(u.email || "")}</td>
+      <td>${safe((u.role === "admin" || u.username.toLowerCase() === "admin") ? "Admin" : "User")}</td>
+      <td>
+        <button type="button" data-edit-user="${safe(u.id)}">Edit</button>
+        ${u.id !== current.id ? `<button type="button" class="danger" data-delete-user="${safe(u.id)}">Delete</button>` : `<span class="muted">Signed-in account</span>`}
+      </td>
+    </tr>`).join("");
+}
+
+$("accountRows").addEventListener("click", async event => {
+  const editButton = event.target.closest("[data-edit-user]");
+  const deleteButton = event.target.closest("[data-delete-user]");
+  if (!canViewAccounts()) {
+    alert("Access denied. Admin only.");
+    return;
+  }
+
+  if (editButton) {
+    const users = read(KEYS.users);
+    const target = users.find(u => u.id === editButton.dataset.editUser);
+    if (!target) return;
+    const name = prompt("Full name:", target.name || "");
+    if (name === null) return;
+    const username = prompt("Username:", target.username || "");
+    if (username === null) return;
+    const email = prompt("Email address:", target.email || "");
+    if (email === null) return;
+    const newPassword = prompt("New password (leave blank to keep current password):", "");
+    if (newPassword === null) return;
+
+    const cleanName = name.trim();
+    const cleanUsername = username.trim();
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanName || !cleanUsername || !cleanEmail) {
+      $("accountMessage").textContent = "Name, username, and email are required.";
+      return;
+    }
+    if (users.some(u => u.id !== target.id && u.username.toLowerCase() === cleanUsername.toLowerCase())) {
+      $("accountMessage").textContent = "That username is already in use.";
+      return;
+    }
+    if (users.some(u => u.id !== target.id && (u.email || "").toLowerCase() === cleanEmail)) {
+      $("accountMessage").textContent = "That email is already in use.";
+      return;
+    }
+    target.name = cleanName;
+    target.username = cleanUsername;
+    target.email = cleanEmail;
+    if (!target.role) target.role = target.username.toLowerCase() === "admin" ? "admin" : "user";
+
+    if (newPassword) {
+      if (newPassword.length < 8) {
+        $("accountMessage").textContent = "New password must contain at least 8 characters.";
+        return;
+      }
+      const hashed = await passwordHash(newPassword);
+      target.salt = hashed.salt;
+      target.hash = hashed.hash;
+    }
+    write(KEYS.users, users);
+    $("accountMessage").textContent = "Account updated successfully.";
+    enterApp();
+    showAccountsPage();
+    return;
+  }
+
+  if (deleteButton) {
+    const users = read(KEYS.users);
+    const target = users.find(u => u.id === deleteButton.dataset.deleteUser);
+    if (!target) return;
+    const isAdmin = u => u.role === "admin" || u.username.toLowerCase() === "admin";
+    if (isAdmin(target) && users.filter(isAdmin).length <= 1) {
+      $("accountMessage").textContent = "The last administrator account cannot be deleted.";
+      return;
+    }
+    if (!confirm(`Delete the account for "${target.name}" (${target.username})? This cannot be undone.`)) return;
+    write(KEYS.users, users.filter(u => u.id !== target.id));
+    $("accountMessage").textContent = "User account deleted.";
+    renderAccounts();
+  }
+});
+
+function renderAll() {
+  $("studentCount").textContent = students().length;
+  $("attendanceCount").textContent = read(KEYS.attendance).length;
+  $("resultCount").textContent = read(KEYS.results).length;
+
+  fillStudentSelect($("attendanceStudent"), "Choose student");
+  fillStudentSelect($("resultStudent"), "Choose student");
+
+  renderStudents();
+  renderAttendance();
+  renderResults();
+  renderAccounts();
+}
+
+function csvCell(value) {
+  return '"' + String(value ?? "").replace(/"/g, '""') + '"';
+}
+
+function exportCsv(type) {
+  let rows;
+
+  if (type === "students") {
+    rows = [
+      ["Admission Number", "Name", "Grade", "Stream", "Guardian"],
+      ...students().map(s =>
+        [s.admission, s.name, s.grade, s.stream, s.guardian])
+    ];
+  } else if (type === "attendance") {
+    rows = [
+      ["Date", "Student", "Event", "Recorded By"],
+      ...read(KEYS.attendance).map(a =>
+        [a.date, studentName(a.studentId), a.type, a.recordedBy])
+    ];
+  } else {
+    rows = [
+      ["Student", "Grade", "Subject", "Term", "Year", "Marks", "Result Grade"],
+      ...read(KEYS.results).map(r => {
+        const s = students().find(s => s.id === r.studentId);
+        return [
+          s?.name || "Unknown",
+          s?.grade || "",
+          r.subject,
+          r.term,
+          r.year,
+          r.marks,
+          markGrade(Number(r.marks))
+        ];
+      })
+    ];
+  }
+
+  const csv = "\uFEFF" +
+    rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+
+  const url = URL.createObjectURL(
+    new Blob([csv], {type: "text/csv;charset=utf-8"})
+  );
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "daystar-" + type + ".csv";
+  link.click();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.querySelectorAll("[data-export]").forEach(button => {
+  button.addEventListener("click", () => exportCsv(button.dataset.export));
+});
+
+setupGrades();
+
+ensureAdminAccount().then(() => {
+  const user = currentUser();
+  if (user) {
+    enterApp();
+  } else {
+    showAuth();
+  }
+}).catch(error => {
+  console.error("Unable to initialise administrator account:", error);
+  showAuth();
+});
+</script>
+
+</body>
+</html>
